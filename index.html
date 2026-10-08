@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рабочий лист по самопознанию</title>
+    <style>
+        :root {
+            --color-bg: #f8f9ff;
+            --color-primary: #a8d8ea;
+            --color-secondary: #ffaaa5;
+            --color-accent: #ffd3b6;
+            --color-success: #b5ead7;
+            --color-text: #2d3436;
+            --color-text-light: #636e72;
+            --color-white: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            min-height: 100vh;
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        #app {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--color-white);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: var(--color-text);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .emoji {
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--color-text-light);
+            margin-bottom: 32px;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            min-height: 44px;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .suggestions {
+            margin-top: 12px;
+        }
+
+        .suggestions-title {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            background: var(--color-bg);
+            border: 2px solid transparent;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .chip:hover {
+            background: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .chip:focus-visible {
+            outline: 3px solid var(--color-text);
+            outline-offset: 2px;
+        }
+
+        .chip.selected {
+            background: var(--color-primary);
+            border-color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .btn {
+            background: var(--color-primary);
+            color: var(--color-text);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 44px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--color-text);
+            outline-offset: 2px;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--color-accent);
+        }
+
+        .btn-success {
+            background: var(--color-success);
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--color-primary);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .block-section {
+            background: var(--color-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .final-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .final-message h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .final-message p {
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            color: var(--color-text-light);
+        }
+
+        .results-summary {
+            background: var(--color-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        .results-summary h3 {
+            margin-bottom: 16px;
+            color: var(--color-text);
+        }
+
+        .result-item {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: var(--color-white);
+            border-radius: 8px;
+        }
+
+        .result-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--color-text);
+        }
+
+        .result-item span {
+            color: var(--color-text-light);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .card {
+                padding: 48px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .suggestion-chips {
+                gap: 12px;
+            }
+
+            .chip {
+                padding: 10px 20px;
+            }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        @media (max-width: 480px) {
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="app" role="main" aria-label="Рабочий лист по самопознанию">
+        <!-- Контент рендерится из JS -->
+    </main>
+
+    <script>
+        // Константы: блоки рабочего листа с вариантами
+        const BLOCKS = [
+            {
+                id: 'interests',
+                emoji: '🎨',
+                title: 'Мои интересы',
+                placeholder: 'Что тебе нравится делать? Чем ты увлекаешься?',
+                suggestions: ['музыка', 'спорт', 'рисование', 'программирование', 'чтение', 'игры с друзьями', 'природа', 'техника', 'мода', 'кулинария', 'фотография', 'танцы']
+            },
+            {
+                id: 'strengths',
+                emoji: '💪',
+                title: 'Мои сильные стороны',
+                placeholder: 'В чем ты хорош(а)? Какие у тебя есть положительные качества?',
+                suggestions: ['доброта', 'ответственность', 'креативность', 'терпение', 'коммуникабельность', 'организованность', 'настойчивость', 'честность', 'дружелюбие', 'смекалка']
+            },
+            {
+                id: 'weaknesses',
+                emoji: '🌱',
+                title: 'Мои слабые стороны',
+                placeholder: 'Над чем тебе хотелось бы поработать? Что бывает сложно?',
+                suggestions: ['стеснительность', 'нетерпеливость', 'рассеянность', 'неуверенность', 'лень', 'импульсивность', 'страх ошибок', 'неорганизованность']
+            },
+            {
+                id: 'goals',
+                emoji: '🎯',
+                title: 'Мои цели',
+                placeholder: 'Чего ты хочешь достичь в ближайшем будущем?',
+                suggestions: ['поступить в колледж', 'выучить новый навык', 'стать волонтером', 'найти подработку', 'улучшить оценки', 'научиться новому хобби', 'сдать экзамены', 'путешествовать']
+            },
+            {
+                id: 'abilities',
+                emoji: '✨',
+                title: 'Мои способности',
+                placeholder: 'Что у тебя получается лучше всего? В чем ты талантлив(а)?',
+                suggestions: ['быстро учусь', 'хорошо рисую', 'умею программировать', 'хорошо готовлю', 'играю на инструменте', 'хорошо общаюсь', 'умею работать в команде', 'решаю задачи', 'пишу тексты', 'мастерю руками']
+            },
+            {
+                id: 'dreams',
+                emoji: '💭',
+                title: 'Мои мечты',
+                placeholder: 'О чем ты мечтаешь? Каким ты видишь свое будущее?',
+                suggestions: ['путешествовать', 'стать профессионалом', 'помогать людям', 'создать что-то свое', 'стать знаменитым', 'иметь много друзей', 'жить в другой стране', 'открыть бизнес']
+            },
+            {
+                id: 'achievements',
+                emoji: '🏆',
+                title: 'Мои достижения',
+                placeholder: 'Чем ты гордишься? Что у тебя получилось?',
+                suggestions: ['выиграл(а) олимпиаду', 'научился новому навыку', 'помог кому-то', 'преодолел(а) страх', 'получил(а) хорошую оценку', 'завершил(а) проект', 'выступил(а) публично', 'сдал(а) экзамен']
+            }
+        ];
+
+        // Состояние приложения
+        const state = {
+            currentScreen: 'start', // start, main, final
+            currentBlock: 0,
+            name: '',
+            answers: {},
+            selectedSuggestions: {}
+        };
+
+        // Загрузка из localStorage
+        function loadState() {
+            const saved = localStorage.getItem('worksheetState');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    Object.assign(state, parsed);
+                } catch (e) {
+                    console.log('Не удалось загрузить сохраненные данные');
+                }
+            }
+        }
+
+        // Сохранение в localStorage
+        function saveState() {
+            localStorage.setItem('worksheetState', JSON.stringify(state));
+        }
+
+        // Рендеринг экрана
+        function render() {
+            const app = document.getElementById('app');
+            
+            // Очистка без innerHTML для безопасности
+            while (app.firstChild) {
+                app.removeChild(app.firstChild);
+            }
+
+            if (state.currentScreen === 'start') {
+                renderStartScreen(app);
+            } else if (state.currentScreen === 'main') {
+                renderMainScreen(app);
+            } else if (state.currentScreen === 'final') {
+                renderFinalScreen(app);
+            }
+        }
+
+        // Экран приветствия
+        function renderStartScreen(container) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('role', 'region');
+            card.setAttribute('aria-label', 'Начало работы');
+
+            const title = document.createElement('h1');
+            title.textContent = '🌟 Рабочий лист по самопознанию 🌟';
+            card.appendChild(title);
+
+            const subtitle = document.createElement('p');
+            subtitle.className = 'subtitle';
+            subtitle.textContent = 'Давай познакомимся с тобой лучше! Заполни этот лист, чтобы узнать о себе больше.';
+            card.appendChild(subtitle);
+
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group';
+
+            const label = document.createElement('label');
+            label.setAttribute('for', 'nameInput');
+            label.textContent = 'Как тебя зовут?';
+            inputGroup.appendChild(label);
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = 'nameInput';
+            input.name = 'name';
+            input.placeholder = 'Введи свое имя';
+            input.value = state.name;
+            input.required = true;
+            input.setAttribute('aria-required', 'true');
+            inputGroup.appendChild(input);
+
+            const error = document.createElement('div');
+            error.className = 'error-message';
+            error.id = 'nameError';
+            error.setAttribute('role', 'alert');
+            error.textContent = 'Пожалуйста, введи свое имя';
+            inputGroup.appendChild(error);
+
+            card.appendChild(inputGroup);
+
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.textContent = 'Начать ✨';
+            btn.type = 'button';
+            btn.addEventListener('click', handleStart);
+            card.appendChild(btn);
+
+            container.appendChild(card);
+        }
+
+        // Основной экран с блоками
+        function renderMainScreen(container) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('role', 'region');
+            card.setAttribute('aria-label', 'Заполнение блоков');
+
+            // Прогресс-бар
+            const progressText = document.createElement('div');
+            progressText.className = 'progress-text';
+            progressText.textContent = `Блок ${state.currentBlock + 1} из ${BLOCKS.length}`;
+            card.appendChild(progressText);
+
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            progressBar.setAttribute('role', 'progressbar');
+            progressBar.setAttribute('aria-valuenow', ((state.currentBlock + 1) / BLOCKS.length) * 100);
+            progressBar.setAttribute('aria-valuemin', '0');
+            progressBar.setAttribute('aria-valuemax', '100');
+
+            const progressFill = document.createElement('div');
+            progressFill.className = 'progress-fill';
+            progressFill.style.width = `${((state.currentBlock + 1) / BLOCKS.length) * 100}%`;
+            progressBar.appendChild(progressFill);
+            card.appendChild(progressBar);
+
+            // Текущий блок
+            const block = BLOCKS[state.currentBlock];
+            const blockSection = document.createElement('div');
+            blockSection.className = 'block-section';
+
+            const title = document.createElement('h2');
+            title.innerHTML = `<span class="emoji">${block.emoji}</span> ${block.title}`;
+            blockSection.appendChild(title);
+
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group';
+
+            const textarea = document.createElement('textarea');
+            textarea.id = `answer-${block.id}`;
+            textarea.name = block.id;
+            textarea.placeholder = block.placeholder;
+            textarea.value = state.answers[block.id] || '';
+            textarea.setAttribute('aria-label', block.title);
+            textarea.addEventListener('input', (e) => {
+                state.answers[block.id] = e.target.value;
+                saveState();
+            });
+            inputGroup.appendChild(textarea);
+            blockSection.appendChild(inputGroup);
+
+            // Варианты для выбора
+            const suggestions = document.createElement('div');
+            suggestions.className = 'suggestions';
+
+            const suggestionsTitle = document.createElement('div');
+            suggestionsTitle.className = 'suggestions-title';
+            suggestionsTitle.textContent = 'Если не знаешь что написать, выбери подходящие варианты:';
+            suggestions.appendChild(suggestionsTitle);
+
+            const chipsContainer = document.createElement('div');
+            chipsContainer.className = 'suggestion-chips';
+
+            const selected = state.selectedSuggestions[block.id] || [];
+
+            block.suggestions.forEach(suggestion => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'chip';
+                chip.textContent = suggestion;
+                chip.setAttribute('aria-pressed', selected.includes(suggestion));
+                
+                if (selected.includes(suggestion)) {
+                    chip.classList.add('selected');
+                }
+
+                chip.addEventListener('click', () => {
+                    if (!state.selectedSuggestions[block.id]) {
+                        state.selectedSuggestions[block.id] = [];
+                    }
+                    
+                    const idx = state.selectedSuggestions[block.id].indexOf(suggestion);
+                    if (idx > -1) {
+                        state.selectedSuggestions[block.id].splice(idx, 1);
+                        chip.classList.remove('selected');
+                        chip.setAttribute('aria-pressed', 'false');
+                    } else {
+                        state.selectedSuggestions[block.id].push(suggestion);
+                        chip.classList.add('selected');
+                        chip.setAttribute('aria-pressed', 'true');
+                    }
+                    saveState();
+                });
+
+                chipsContainer.appendChild(chip);
+            });
+
+            suggestions.appendChild(chipsContainer);
+            blockSection.appendChild(suggestions);
+            card.appendChild(blockSection);
+
+            // Кнопки навигации
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'btn-group';
+
+            if (state.currentBlock > 0) {
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'btn btn-secondary';
+                prevBtn.textContent = '← Назад';
+                prevBtn.type = 'button';
+                prevBtn.addEventListener('click', handlePrev);
+                btnGroup.appendChild(prevBtn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn';
+            nextBtn.textContent = state.currentBlock === BLOCKS.length - 1 ? 'Завершить ✓' : 'Далее →';
+            nextBtn.type = 'button';
+            nextBtn.addEventListener('click', handleNext);
+            btnGroup.appendChild(nextBtn);
+
+            card.appendChild(btnGroup);
+            container.appendChild(card);
+        }
+
+        // Финальный экран
+        function renderFinalScreen(container) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('role', 'region');
+            card.setAttribute('aria-label', 'Завершение');
+
+            const finalMessage = document.createElement('div');
+            finalMessage.className = 'final-message';
+
+            const title = document.createElement('h1');
+            title.textContent = '🎉 Отличная работа! 🎉';
+            finalMessage.appendChild(title);
+
+            const message = document.createElement('p');
+            message.textContent = `${state.name}, ты успешно заполнил(а) рабочий лист по самопознанию!`;
+            finalMessage.appendChild(message);
+
+            const summary = document.createElement('div');
+            summary.className = 'results-summary';
+
+            const summaryTitle = document.createElement('h3');
+            summaryTitle.textContent = '📝 Твои ответы:';
+            summary.appendChild(summaryTitle);
+
+            BLOCKS.forEach(block => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+
+                const strong = document.createElement('strong');
+                strong.textContent = `${block.emoji} ${block.title}`;
+                item.appendChild(strong);
+
+                const text = document.createElement('span');
+                const answer = state.answers[block.id] || '';
+                const suggestions = state.selectedSuggestions[block.id] || [];
+                
+                let displayText = answer;
+                if (suggestions.length > 0) {
+                    displayText += (answer ? ', ' : '') + suggestions.join(', ');
+                }
+                
+                text.textContent = displayText || 'Не заполнено';
+                item.appendChild(text);
+
+                summary.appendChild(item);
+            });
+
+            finalMessage.appendChild(summary);
+            card.appendChild(finalMessage);
+
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'btn-group';
+
+            const restartBtn = document.createElement('button');
+            restartBtn.className = 'btn btn-secondary';
+            restartBtn.textContent = 'Начать заново';
+            restartBtn.type = 'button';
+            restartBtn.addEventListener('click', handleRestart);
+            btnGroup.appendChild(restartBtn);
+
+            const printBtn = document.createElement('button');
+            printBtn.className = 'btn btn-success';
+            printBtn.textContent = 'Распечатать 🖨️';
+            printBtn.type = 'button';
+            printBtn.addEventListener('click', handlePrint);
+            btnGroup.appendChild(printBtn);
+
+            card.appendChild(btnGroup);
+            container.appendChild(card);
+        }
+
+        // Обработчики
+        function handleStart() {
+            const input = document.getElementById('nameInput');
+            const error = document.getElementById('nameError');
+            const name = input.value.trim();
+
+            if (!name) {
+                error.classList.add('show');
+                input.focus();
+                return;
+            }
+
+            error.classList.remove('show');
+            state.name = name;
+            state.currentScreen = 'main';
+            state.currentBlock = 0;
+            saveState();
+            render();
+        }
+
+        function handleNext() {
+            if (state.currentBlock < BLOCKS.length - 1) {
+                state.currentBlock++;
+                saveState();
+                render();
+                window.scrollTo(0, 0);
+            } else {
+                state.currentScreen = 'final';
+                saveState();
+                render();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function handlePrev() {
+            if (state.currentBlock > 0) {
+                state.currentBlock--;
+                saveState();
+                render();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function handleRestart() {
+            if (confirm('Ты уверен(а), что хочешь начать заново? Все ответы будут удалены.')) {
+                localStorage.removeItem('worksheetState');
+                state.currentScreen = 'start';
+                state.currentBlock = 0;
+                state.name = '';
+                state.answers = {};
+                state.selectedSuggestions = {};
+                render();
+            }
+        }
+
+        function handlePrint() {
+            window.print();
+        }
+
+        // Инициализация
+        function init() {
+            loadState();
+            render();
+        }
+
+        // Запуск
+        init();
+    </script>
+</body>
+</html>
